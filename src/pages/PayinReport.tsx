@@ -1,17 +1,13 @@
-// features/payin-report/components/PayinReport.tsx
-
 import { FilterOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { defaultPaginationConfig } from '../../config/paginationConfig';
-import {
-  type PayinReportFilters,
-  payinReportFilterConfig,
-} from '../payin-report/config/filterConfig';
+import { payinReportFilterConfig } from '../payin-report/config/filterConfig';
 import { payinReportColumns } from '../payin-report/config/tableConfig';
 import { usePayinReport } from '../payin-report/hooks/usePayinReport';
 import type { PayinReport as PayinReportType } from '../payin-report/types/payinReport.interface';
+import type { PayinReportFilters } from '../payin-report/types/payinReportFilters.interface';
 import { FilterDrawer } from '../shared/components/FilterDrawer/FilterDrawer';
 
 export default function PayinReport() {
@@ -55,7 +51,6 @@ export default function PayinReport() {
       ...(filters.positions && { positions: filters.positions }),
     };
 
-    // Add date filters if dateRange exists
     if (filters.dueDateRange) {
       const [startDate, endDate] = filters.dueDateRange;
       requestBody.dueDateFrom = startDate;
@@ -98,7 +93,6 @@ export default function PayinReport() {
         scroll={{ x: 1500, y: '60vh' }}
         toolbar={{
           title: 'Payin Reports',
-          tooltip: 'Payin reports and analytics',
           actions: [
             <Button
               key="filter"

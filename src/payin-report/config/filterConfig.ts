@@ -1,15 +1,6 @@
-// features/payin-report/config/filterConfig.ts
+import { ApiResource } from '@/api/enums/apiResources';
 import type { FilterConfig } from '../../shared/components/FilterDrawer/FilterConfig.interface';
-
-export interface PayinReportFilters {
-  dueDateRange?: [string, string];
-  paymentStatuses?: string[];
-  totalDueRanges?: string[];
-  contractStatuses?: string[];
-  userTypes?: string[];
-  organizationNames?: string[];
-  positions?: number;
-}
+import type { PayinReportFilters } from '../types/payinReportFilters.interface';
 
 export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
   {
@@ -27,6 +18,7 @@ export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
       { value: 'paid', label: 'Paid' },
     ],
     placeholder: 'Select Payment Status',
+    required: true,
   },
   {
     name: 'totalDueRanges',
@@ -40,6 +32,7 @@ export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
       { value: '50000+', label: '>50K' },
     ],
     placeholder: 'Select Total Due Range',
+    required: false,
   },
   {
     name: 'contractStatuses',
@@ -50,6 +43,7 @@ export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
       { value: 'in_progress', label: 'In Progress' },
       { value: 'signed', label: 'Signed' },
     ],
+    required: true,
   },
   {
     name: 'userTypes',
@@ -59,23 +53,29 @@ export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
       { value: 'individual', label: 'Individual' },
       { value: 'self_pay_corporate', label: 'Self-pay Corporate' },
     ],
+    required: true,
   },
   {
     name: 'organizationNames',
     label: 'Organization Name',
     type: 'multi-select',
-    options: [
-      { value: 'org1', label: 'Organization 1' },
-      { value: 'org2', label: 'Organization 2' },
-      { value: 'org3', label: 'Organization 3' },
-      { value: 'org4', label: 'Organization 4' },
-    ],
+    optionsFetch: {
+      resource: ApiResource.MF_ADMIN,
+      endpoint: 'api/organizations',
+      transform: (data: any) =>
+        data.map((item: any) => ({
+          value: item.id,
+          label: item.code,
+        })),
+    },
     placeholder: 'Select Organization',
+    required: true,
   },
   {
     name: 'positions',
     label: 'Positions',
     type: 'number',
     placeholder: 'Enter number of positions',
+    required: false,
   },
 ];
