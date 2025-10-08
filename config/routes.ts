@@ -29,6 +29,18 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/user-profile',
+    name: 'User Profile',
+    icon: 'user',
+    component: './UserProfile',
+  },
+  {
+    path: '/payin-report',
+    name: 'Payin Report',
+    icon: 'dollar',
+    component: './PayinReport',
+  },
+  {
     path: '/admin',
     name: 'admin',
     icon: 'crown',

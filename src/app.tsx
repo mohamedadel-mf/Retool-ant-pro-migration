@@ -15,6 +15,7 @@ import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import '@ant-design/v5-patch-for-react-19';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const isDev = process.env.NODE_ENV === 'development';
 const isDevOrTest = isDev || process.env.CI;
@@ -154,3 +155,11 @@ export const request: RequestConfig = {
   baseURL: isDev ? '' : 'https://proapi.azurewebsites.net',
   ...errorConfig,
 };
+
+const queryClient = new QueryClient({});
+
+export function rootContainer(container: React.ReactNode) {
+  return (
+    <QueryClientProvider client={queryClient}>{container}</QueryClientProvider>
+  );
+}
