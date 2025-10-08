@@ -42,6 +42,9 @@ export function FilterField<T>({ config }: FilterFieldProps<T>) {
       case 'date-range':
         return <RangePicker style={{ width: '100%' }} />;
 
+      case 'date':
+        return <DatePicker style={{ width: '100%' }} />;
+
       case 'multi-select':
         return (
           <Select

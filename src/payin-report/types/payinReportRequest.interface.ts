@@ -1,7 +1,11 @@
-import type { PayinReportFilters } from './payinReportFilters.interface';
-
 export interface PayinReportRequest {
-  page?: number;
+  pageNumber?: number;
   pageSize?: number;
-  filters: PayinReportFilters;
+  dueDate?: string;
+  paymentStatuses?: string[];
+  totalDueRanges?: string[];
+  contractStatuses?: string[];
+  userTypes?: string[];
+  organizationNames?: string[];
+  positions?: number;
 }

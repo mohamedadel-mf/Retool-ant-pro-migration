@@ -3,6 +3,7 @@ export interface FilterConfig<T> {
   name: keyof T;
   label: string;
   type:
+    | 'date'
     | 'date-range'
     | 'multi-select'
     | 'text'

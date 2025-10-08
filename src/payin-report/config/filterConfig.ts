@@ -12,9 +12,9 @@ import type { PayinReportFilters } from '../types/payinReportFilters.interface';
 
 export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
   {
-    name: 'dueDateRange',
+    name: 'dueDate',
     label: 'Due Date',
-    type: 'date-range',
+    type: 'date',
   },
   {
     name: 'paymentStatuses',

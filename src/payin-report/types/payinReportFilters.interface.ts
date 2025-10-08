@@ -1,5 +1,5 @@
 export interface PayinReportFilters {
-  dueDateRange?: [string, string];
+  dueDate?: string;
   paymentStatuses?: string[];
   totalDueRanges?: string[];
   contractStatuses?: string[];

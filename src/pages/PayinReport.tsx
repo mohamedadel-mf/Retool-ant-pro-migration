@@ -2,10 +2,12 @@ import { FilterOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
+import type { PayinReportRequest } from '@/payin-report/types/payinReportRequest.interface';
 import { defaultPaginationConfig } from '../../config/paginationConfig';
 import { payinReportFilterConfig } from '../payin-report/config/filterConfig';
 import { payinReportColumns } from '../payin-report/config/tableConfig';
 import { usePayinReport } from '../payin-report/hooks/usePayinReport';
+import { usePayinReportState } from '../payin-report/hooks/usePayinReportState';
 import type { PayinReport as PayinReportType } from '../payin-report/types/payinReport.interface';
 import type { PayinReportFilters } from '../payin-report/types/payinReportFilters.interface';
 import { FilterDrawer } from '../shared/components/FilterDrawer/FilterDrawer';
@@ -13,26 +15,18 @@ import { FilterDrawer } from '../shared/components/FilterDrawer/FilterDrawer';
 export default function PayinReport() {
   const { data, paginationDetails, isLoading, fetchError, fetchPayinReport } =
     usePayinReport();
-
-  const [pagination, setPagination] = useState({
-    current: defaultPaginationConfig.defaultPageNumber,
-    pageSize: defaultPaginationConfig.defaultPageSize,
-  });
-
-  const [filters, setFilters] = useState<PayinReportFilters>({
-    dueDateRange: undefined,
-    paymentStatuses: [],
-    totalDueRanges: [],
-    contractStatuses: [],
-    userTypes: [],
-    organizationNames: [],
-    positions: undefined,
-  });
-
-  const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
+  const {
+    pagination,
+    setPagination,
+    filters,
+    setFilters,
+    drawerVisible,
+    setDrawerVisible,
+    resetFilters,
+  } = usePayinReportState();
 
   useEffect(() => {
-    const requestBody: any = {
+    const requestBody: PayinReportRequest = {
       pageSize: pagination.pageSize,
       pageNumber: pagination.current,
       ...(filters.paymentStatuses?.length && {
@@ -49,13 +43,8 @@ export default function PayinReport() {
         organizationNames: filters.organizationNames,
       }),
       ...(filters.positions && { positions: filters.positions }),
+      ...(filters.dueDate && { dueDate: filters.dueDate }),
     };
-
-    if (filters.dueDateRange) {
-      const [startDate, endDate] = filters.dueDateRange;
-      requestBody.dueDateFrom = startDate;
-      requestBody.dueDateTo = endDate;
-    }
 
     fetchPayinReport(requestBody);
   }, [pagination, filters]);
@@ -67,15 +56,7 @@ export default function PayinReport() {
   };
 
   const handleClearFilters = () => {
-    setFilters({
-      dueDateRange: undefined,
-      paymentStatuses: [],
-      totalDueRanges: [],
-      contractStatuses: [],
-      userTypes: [],
-      organizationNames: [],
-      positions: undefined,
-    });
+    resetFilters();
     setPagination((prev) => ({ ...prev, current: 1 }));
     setDrawerVisible(false);
   };
@@ -116,7 +97,6 @@ export default function PayinReport() {
           pageSize: pagination.pageSize,
           total: paginationDetails.totalItems,
           showSizeChanger: true,
-          showQuickJumper: true,
           pageSizeOptions: defaultPaginationConfig.pageSizeOptions,
           showTotal: (total, range) =>
             `Showing ${range[0]}-${range[1]} of ${total} records`,
