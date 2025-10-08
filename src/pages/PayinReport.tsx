@@ -82,13 +82,6 @@ export default function PayinReport() {
               onClick={() => setDrawerVisible(true)}
             >
               Filters
-              {Object.values(filters).some(
-                (filter) =>
-                  filter &&
-                  (Array.isArray(filter)
-                    ? filter.length > 0
-                    : filter !== undefined),
-              ) && ' •'}
             </Button>,
           ],
         }}
@@ -98,8 +91,6 @@ export default function PayinReport() {
           total: paginationDetails.totalItems,
           showSizeChanger: true,
           pageSizeOptions: defaultPaginationConfig.pageSizeOptions,
-          showTotal: (total, range) =>
-            `Showing ${range[0]}-${range[1]} of ${total} records`,
           onChange: (page, pageSize) => {
             setPagination({
               current: page,
@@ -108,12 +99,6 @@ export default function PayinReport() {
           },
         }}
         search={false}
-        options={{
-          density: true,
-          fullScreen: true,
-          reload: () => window.location.reload(),
-          setting: true,
-        }}
       />
 
       <FilterDrawer
