@@ -29,22 +29,13 @@ export default function PayinReport() {
     const requestBody: PayinReportRequest = {
       pageSize: pagination.pageSize,
       pageNumber: pagination.current,
-      ...(filters.paymentStatuses?.length && {
-        paymentStatuses: filters.paymentStatuses,
-      }),
-      ...(filters.totalDueRanges?.length && {
-        totalDueRanges: filters.totalDueRanges,
-      }),
-      ...(filters.contractStatuses?.length && {
-        contractStatuses: filters.contractStatuses,
-      }),
-      ...(filters.userTypes?.length && { userTypes: filters.userTypes }),
-      ...(filters.organizationNames?.length && {
-        organizationNames: filters.organizationNames,
-      }),
-      ...(filters.positions && { positions: filters.positions }),
-      ...(filters.dueDate && { dueDate: filters.dueDate }),
     };
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && (Array.isArray(value) ? value.length > 0 : true)) {
+        requestBody[key as keyof PayinReportRequest] = value;
+      }
+    });
 
     fetchPayinReport(requestBody);
   }, [pagination, filters]);
