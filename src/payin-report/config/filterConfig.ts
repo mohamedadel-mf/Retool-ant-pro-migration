@@ -1,5 +1,13 @@
 import { ApiResource } from '@/api/enums/apiResources';
+import { ApiEndpoints } from '../../api/endpoints/apiEndpoints';
 import type { FilterConfig } from '../../shared/components/FilterDrawer/FilterConfig.interface';
+import type { Organization } from '../types/organizations.interface';
+import {
+  CONTRACT_STATUS_OPTIONS,
+  PAYMENT_STATUS_OPTIONS,
+  TOTAL_DUE_RANGE_OPTIONS,
+  USER_TYPE_OPTIONS,
+} from '../types/payinReportFilterOptions';
 import type { PayinReportFilters } from '../types/payinReportFilters.interface';
 
 export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
@@ -12,11 +20,7 @@ export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
     name: 'paymentStatuses',
     label: 'Payment Status',
     type: 'multi-select',
-    options: [
-      { value: 'not_paid', label: 'Not Paid' },
-      { value: 'partially_paid', label: 'Partially Paid' },
-      { value: 'paid', label: 'Paid' },
-    ],
+    options: PAYMENT_STATUS_OPTIONS,
     placeholder: 'Select Payment Status',
     required: true,
   },
@@ -24,13 +28,7 @@ export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
     name: 'totalDueRanges',
     label: 'Total Due Range',
     type: 'select',
-    options: [
-      { value: '1-4999', label: '1-4,999' },
-      { value: '5000-15000', label: '5K-15K' },
-      { value: '15000-25000', label: '15K-25K' },
-      { value: '25000-50000', label: '25K-50K' },
-      { value: '50000+', label: '>50K' },
-    ],
+    options: TOTAL_DUE_RANGE_OPTIONS,
     placeholder: 'Select Total Due Range',
     required: false,
   },
@@ -38,21 +36,14 @@ export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
     name: 'contractStatuses',
     label: 'Contract Status',
     type: 'checkbox-group',
-    options: [
-      { value: 'pending', label: 'Pending' },
-      { value: 'in_progress', label: 'In Progress' },
-      { value: 'signed', label: 'Signed' },
-    ],
+    options: CONTRACT_STATUS_OPTIONS,
     required: true,
   },
   {
     name: 'userTypes',
     label: 'User Type',
     type: 'checkbox-group',
-    options: [
-      { value: 'individual', label: 'Individual' },
-      { value: 'self_pay_corporate', label: 'Self-pay Corporate' },
-    ],
+    options: USER_TYPE_OPTIONS,
     required: true,
   },
   {
@@ -61,9 +52,9 @@ export const payinReportFilterConfig: FilterConfig<PayinReportFilters>[] = [
     type: 'multi-select',
     optionsFetch: {
       resource: ApiResource.MF_ADMIN,
-      endpoint: 'api/organizations',
-      transform: (data: any) =>
-        data.map((item: any) => ({
+      endpoint: ApiEndpoints.ORGANIZATIONS,
+      transform: (data: Organization[]) =>
+        data.map((item: Organization) => ({
           value: item.id,
           label: item.code,
         })),

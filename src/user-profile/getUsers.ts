@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ApiEndpoints } from '../api/endpoints/apiEndpoints';
 import { ApiResource } from '../api/enums/apiResources';
 import { HttpMethod } from '../api/enums/httpMethods.enum';
 import { useApiMutation } from '../api/useApi';
@@ -22,7 +23,7 @@ export function useUserProfile() {
 
   const mutation = useApiMutation<UserProfileResponse, Record<string, any>>({
     resource: ApiResource.MF_ADMIN,
-    endpoint: 'api/UserProfile',
+    endpoint: ApiEndpoints.USER_PROFILE,
     method: HttpMethod.POST,
   });
 

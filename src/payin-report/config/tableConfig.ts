@@ -7,7 +7,6 @@ export const payinReportColumns: ProColumns<PayinReport>[] = [
     title: 'UUID',
     dataIndex: 'uuid',
     key: 'uuid',
-    width: 280,
     ellipsis: true,
   },
   {
@@ -24,13 +23,11 @@ export const payinReportColumns: ProColumns<PayinReport>[] = [
     title: 'National ID',
     dataIndex: 'nationalID',
     key: 'nationalID',
-    width: 150,
   },
   {
     title: 'Phone',
     dataIndex: 'phone',
     key: 'phone',
-    width: 150,
   },
   {
     title: 'Total Due Amount',

@@ -1,6 +1,5 @@
-export const apiEndpoints = {
-  users: {
-    getUserByID: '/users',
-    updateUserByID: '/users',
-  },
+export const ApiEndpoints = {
+  ORGANIZATIONS: 'api/organizations',
+  PAYIN_REPORT: 'api/PayinReport',
+  USER_PROFILE: 'api/UserProfile',
 };
