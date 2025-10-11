@@ -1,10 +1,14 @@
-import { Checkbox, DatePicker, Form, Input, InputNumber, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/api/apiFetch';
 import { HttpMethod } from '../../../api/enums/httpMethods.enum';
+import { MFCheckbox, MFCheckboxGroup } from '../wrappers/MFCheckbox';
+import { MFDatePicker } from '../wrappers/MFDatePicker';
+import { MFFormItem } from '../wrappers/MFFormItem';
+import { MFInput } from '../wrappers/MFInput';
+import { MFInputNumber } from '../wrappers/MFInputNumber';
+import { MFRangePicker } from '../wrappers/MFRangePicker';
+import { MFSelect } from '../wrappers/MFSelect';
 import type { FilterConfig } from './FilterConfig.interface';
-
-const { RangePicker } = DatePicker;
 
 interface FilterFieldProps<T> {
   config: FilterConfig<T>;
@@ -12,11 +16,11 @@ interface FilterFieldProps<T> {
 
 export function FilterField<T>({ config }: FilterFieldProps<T>) {
   const [fetchedOptions, setFetchedOptions] = useState<
-    { value: any; label: string }[]
+    { value: string | number; label: string }[]
   >([]);
 
   useEffect(() => {
-    const fetchOptions = async () => {
+    const fetchOptions = async (): Promise<void> => {
       if (!config.optionsFetch) return;
 
       const data = await apiFetch({
@@ -27,9 +31,9 @@ export function FilterField<T>({ config }: FilterFieldProps<T>) {
 
       const transformedOptions = config.optionsFetch.transform
         ? config.optionsFetch.transform(data)
-        : data;
+        : (data as { value: string | number; label: string }[]);
 
-      setFetchedOptions(transformedOptions as any);
+      setFetchedOptions(transformedOptions);
     };
 
     fetchOptions();
@@ -37,62 +41,89 @@ export function FilterField<T>({ config }: FilterFieldProps<T>) {
 
   const finalOptions = config.options || fetchedOptions;
 
+  if (config.hidden) {
+    return null;
+  }
+
   const renderField = () => {
     switch (config.type) {
       case 'date-range':
-        return <RangePicker style={{ width: '100%' }} />;
+        return (
+          <MFRangePicker style={{ width: '100%' }} disabled={config.disabled} />
+        );
 
       case 'date':
-        return <DatePicker style={{ width: '100%' }} />;
+        return (
+          <MFDatePicker style={{ width: '100%' }} disabled={config.disabled} />
+        );
 
       case 'multi-select':
         return (
-          <Select
+          <MFSelect
             mode="multiple"
             placeholder={config.placeholder}
             options={finalOptions}
             style={{ width: '100%' }}
+            disabled={config.disabled}
           />
         );
 
       case 'select':
         return (
-          <Select
+          <MFSelect
             placeholder={config.placeholder}
             options={finalOptions}
             style={{ width: '100%' }}
+            disabled={config.disabled}
           />
         );
 
       case 'text':
-        return <Input placeholder={config.placeholder} />;
+        return (
+          <MFInput
+            placeholder={config.placeholder}
+            disabled={config.disabled}
+          />
+        );
 
       case 'number':
         return (
-          <InputNumber
+          <MFInputNumber
             style={{ width: '100%' }}
             placeholder={config.placeholder}
+            disabled={config.disabled}
           />
         );
 
       case 'checkbox':
-        return <Checkbox>{config.label}</Checkbox>;
+        return (
+          <MFCheckbox disabled={config.disabled}>{config.label}</MFCheckbox>
+        );
 
       case 'checkbox-group':
-        return <Checkbox.Group options={finalOptions} />;
+        return (
+          <MFCheckboxGroup options={finalOptions} disabled={config.disabled} />
+        );
 
       default:
-        return <Input placeholder={config.placeholder} />;
+        return (
+          <MFInput
+            placeholder={config.placeholder}
+            disabled={config.disabled}
+          />
+        );
     }
   };
 
   return (
-    <Form.Item
+    <MFFormItem
       label={config.label}
       name={config.name as string}
       required={config.required}
+      rules={config.rules}
+      initialValue={config.defaultValue}
     >
       {renderField()}
-    </Form.Item>
+    </MFFormItem>
   );
 }

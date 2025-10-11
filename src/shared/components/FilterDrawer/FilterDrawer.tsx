@@ -1,4 +1,4 @@
-import { Button, Drawer, Form } from 'antd';
+import { Button, Drawer, Form, notification } from 'antd';
 import type { Store } from 'antd/es/form/interface';
 import type { FilterConfig } from './FilterConfig.interface';
 import { FilterField } from './FilterField';
@@ -24,10 +24,11 @@ export function FilterDrawer<TFilters extends Store>({
 }: FilterDrawerProps<TFilters>) {
   const [form] = Form.useForm();
 
-  const handleApply = () => {
-    form.validateFields().then((values) => {
+  const handleApply = async () => {
+    try {
+      const values = await form.validateFields();
       onApply(values);
-    });
+    } catch (error) {}
   };
 
   return (
@@ -44,7 +45,7 @@ export function FilterDrawer<TFilters extends Store>({
         </div>
       }
     >
-      <Form form={form} layout="vertical" initialValues={filters}>
+      <Form form={form} layout="vertical">
         {filterConfig.map((config) => (
           <FilterField key={config.name as string} config={config} />
         ))}

@@ -5,7 +5,7 @@ import type { PayinReportFilters } from '../types/payinReportFilters.interface';
 const INITIAL_FILTERS: PayinReportFilters = {
   dueDate: undefined,
   paymentStatuses: [],
-  totalDueRanges: [],
+  totalDueRanges: '',
   contractStatuses: [],
   userTypes: [],
   organizationNames: [],
