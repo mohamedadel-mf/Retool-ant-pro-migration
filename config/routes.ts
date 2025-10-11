@@ -41,6 +41,12 @@ export default [
     component: './PayinReport',
   },
   {
+    path: '/payout-report',
+    name: 'Payout Report',
+    icon: 'rise',
+    component: './PayoutReport',
+  },
+  {
     path: '/admin',
     name: 'admin',
     icon: 'crown',

@@ -12,7 +12,8 @@ export interface FilterConfig<T> {
     | 'date'
     | 'date-range'
     | 'checkbox'
-    | 'checkbox-group';
+    | 'checkbox-group'
+    | 'radio';
 
   placeholder?: string;
   required?: boolean;

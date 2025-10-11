@@ -1,20 +1,20 @@
 import { FilterOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
-import { useEffect, useState } from 'react';
-import type { PayinReportRequest } from '@/payin-report/types/payinReportRequest.interface';
+import { useEffect } from 'react';
 import { defaultPaginationConfig } from '../../config/paginationConfig';
-import { payinReportFilterConfig } from '../payin-report/config/filterConfig';
-import { payinReportColumns } from '../payin-report/config/tableConfig';
-import { usePayinReport } from '../payin-report/hooks/usePayinReport';
-import { usePayinReportState } from '../payin-report/hooks/usePayinReportState';
-import type { PayinReport as PayinReportType } from '../payin-report/types/payinReport.interface';
-import type { PayinReportFilters } from '../payin-report/types/payinReportFilters.interface';
+import { payoutReportFilterConfig } from '../payout-report/config/filterConfig';
+import { payoutReportColumns } from '../payout-report/config/tableConfig';
+import { usePayoutReport } from '../payout-report/hooks/usePayoutReport';
+import { usePayoutReportState } from '../payout-report/hooks/usePayoutReportState';
+import type { PayoutReport as PayoutReportType } from '../payout-report/types/payoutReport.interface';
+import type { PayoutReportFilters } from '../payout-report/types/payoutReportFilters.interface';
+import type { PayoutReportRequest } from '../payout-report/types/payoutReportRequest.interface';
 import { FilterDrawer } from '../shared/components/FilterDrawer/FilterDrawer';
 
-export default function PayinReport() {
-  const { data, paginationDetails, isLoading, fetchError, fetchPayinReport } =
-    usePayinReport();
+export default function PayoutReport() {
+  const { data, paginationDetails, isLoading, fetchError, fetchPayoutReport } =
+    usePayoutReport();
   const {
     pagination,
     setPagination,
@@ -23,24 +23,24 @@ export default function PayinReport() {
     drawerVisible,
     setDrawerVisible,
     resetFilters,
-  } = usePayinReportState();
+  } = usePayoutReportState();
 
   useEffect(() => {
-    const requestBody: PayinReportRequest = {
+    const requestBody: PayoutReportRequest = {
       pageSize: pagination.pageSize,
       pageNumber: pagination.current,
     };
 
     Object.entries(filters).forEach(([key, value]) => {
       if (value && (Array.isArray(value) ? value.length > 0 : true)) {
-        requestBody[key as keyof PayinReportRequest] = value;
+        requestBody[key as keyof PayoutReportRequest] = value;
       }
     });
 
-    fetchPayinReport(requestBody);
+    fetchPayoutReport(requestBody);
   }, [pagination, filters]);
 
-  const handleApplyFilters = (newFilters: PayinReportFilters) => {
+  const handleApplyFilters = (newFilters: PayoutReportFilters) => {
     setFilters(newFilters);
     setPagination((prev) => ({ ...prev, current: 1 }));
     setDrawerVisible(false);
@@ -53,18 +53,18 @@ export default function PayinReport() {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (fetchError) return <div>Failed to load payin reports</div>;
+  if (fetchError) return <div>Failed to load payout reports</div>;
 
   return (
     <>
-      <ProTable<PayinReportType>
-        columns={payinReportColumns}
+      <ProTable<PayoutReportType>
+        columns={payoutReportColumns}
         dataSource={data || []}
         rowKey="uuid"
         loading={isLoading}
         scroll={{ x: 'max-content', y: '60vh' }}
         toolbar={{
-          title: 'Payin Reports',
+          title: 'Payout Reports',
           actions: [
             <Button
               key="filter"
@@ -98,8 +98,8 @@ export default function PayinReport() {
         onApply={handleApplyFilters}
         onClear={handleClearFilters}
         filters={filters}
-        filterConfig={payinReportFilterConfig}
-        title="Payin Report Filters"
+        filterConfig={payoutReportFilterConfig}
+        title="Payout Report Filters"
       />
     </>
   );

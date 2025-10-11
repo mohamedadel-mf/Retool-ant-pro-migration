@@ -6,6 +6,7 @@ import { MFDatePicker } from '../wrappers/MFDatePicker';
 import { MFFormItem } from '../wrappers/MFFormItem';
 import { MFInput } from '../wrappers/MFInput';
 import { MFInputNumber } from '../wrappers/MFInputNumber';
+import { MFRadioGroup } from '../wrappers/MFRadioGroup';
 import { MFRangePicker } from '../wrappers/MFRangePicker';
 import { MFSelect } from '../wrappers/MFSelect';
 import type { FilterConfig } from './FilterConfig.interface';
@@ -103,6 +104,11 @@ export function FilterField<T>({ config }: FilterFieldProps<T>) {
       case 'checkbox-group':
         return (
           <MFCheckboxGroup options={finalOptions} disabled={config.disabled} />
+        );
+
+      case 'radio':
+        return (
+          <MFRadioGroup options={finalOptions} disabled={config.disabled} />
         );
 
       default:
